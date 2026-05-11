@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from langgraph.graph import END, START, StateGraph
 
-from .agents import build_agents, should_run_rag
-from .core.schema.models import PipelineState
+try:
+    from .agents import build_agents, should_run_rag
+    from .core.schema.models import PipelineState
+except ImportError:  # pragma: no cover
+    from agents import build_agents, should_run_rag
+    from core.schema.models import PipelineState
 
 
 def build_graph(llm_model: str | None = None):

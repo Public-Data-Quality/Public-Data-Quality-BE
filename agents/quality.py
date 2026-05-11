@@ -123,10 +123,15 @@ class DataProfilingAgent(BaseAgent):
                 )
             )
 
+        dataset_meta = state["dataset_meta"]
+        if updated:
+            dataset_meta.total_rows = stats[updated[0].raw_name]["rows"]
+
         return {
             "columns": updated,
             "preview_headers": list(columns_by_name.keys()),
             "preview_rows": preview_rows,
+            "dataset_meta": dataset_meta,
             "agent_traces": traces,
         }
 
@@ -215,7 +220,10 @@ class VerificationAgent(BaseAgent):
             "repair_suggestion_count": repairs,
             "manual_review_count": manual_review,
             "finding_count": len(state["findings"]),
+            "manual_review_finding_count": sum(1 for finding in state["findings"] if finding.finding_type == "manual_review"),
+            "issue_finding_count": sum(1 for finding in state["findings"] if finding.finding_type == "issue"),
             "finding_breakdown": dict(Counter(finding.category_label for finding in state["findings"])),
+            "finding_type_breakdown": dict(Counter(finding.display_label for finding in state["findings"])),
             "llm_agents_enabled": bool(state.get("use_llm_agents")),
         }
         traces.append(

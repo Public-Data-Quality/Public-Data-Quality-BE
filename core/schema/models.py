@@ -60,6 +60,7 @@ class ColumnProfile(BaseModel):
     numeric_mean: float | None = None
     semantic_profile_label: str | None = None
     semantic_profile_description: str | None = None
+    semantic_profile_analysis_methods: list[str] = Field(default_factory=list)
     semantic_profile_confidence: float | None = None
     semantic_profile_llm_needed: bool | None = None
     semantic_profile_llm_reasons: list[str] = Field(default_factory=list)
@@ -70,6 +71,8 @@ class ColumnProfile(BaseModel):
 class ValidationFinding(BaseModel):
     column_name: str
     severity: Literal["info", "warning", "error"]
+    finding_type: Literal["manual_review", "issue"]
+    display_label: str
     category_group: str
     category_label: str
     criterion_name: str

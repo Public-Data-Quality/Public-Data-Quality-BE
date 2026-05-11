@@ -206,7 +206,6 @@ def load_uploaded_dataset_meta(file_path: str | Path, dataset_name: str | None =
     header = load_uploaded_headers(path)
     if not header:
         raise ValueError("Uploaded dataset has no header row.")
-    total_rows = sum(1 for _ in iter_uploaded_rows(path))
 
     name = dataset_name or path.stem
     return DatasetMeta(
@@ -221,7 +220,7 @@ def load_uploaded_dataset_meta(file_path: str | Path, dataset_name: str | None =
         request_fields=[],
         response_fields=[column.strip() for column in header if column.strip()],
         update_cycle=UPLOAD_UPDATE_CYCLE,
-        total_rows=total_rows,
+        total_rows=None,
     )
 
 

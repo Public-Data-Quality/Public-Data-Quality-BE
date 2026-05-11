@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .core.config.constants import DEFAULT_META_CSV_NAME, DEFAULT_STANDARD_TERMS_CSV_NAME
-from .graph import build_graph
+try:
+    from .core.config.constants import DEFAULT_META_CSV_NAME, DEFAULT_STANDARD_TERMS_CSV_NAME
+    from .graph import build_graph
+except ImportError:  # pragma: no cover
+    from core.config.constants import DEFAULT_META_CSV_NAME, DEFAULT_STANDARD_TERMS_CSV_NAME
+    from graph import build_graph
 
 
 def default_data_paths(base_dir: Path | None = None) -> tuple[Path, Path]:
@@ -26,7 +30,7 @@ def run_pipeline(
     llm_model: str | None = None,
 ) -> dict:
     if not uploaded_dataset_csv and not dataset_id and not dataset_name:
-        raise ValueError("uploaded_dataset_csv is required.")
+        raise ValueError("uploaded_dataset_csv, dataset_id, or dataset_name 중 하나는 필요합니다.")
 
     default_meta, default_standard = default_data_paths()
     graph = build_graph(llm_model=llm_model)
