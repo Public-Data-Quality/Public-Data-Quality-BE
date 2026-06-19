@@ -60,7 +60,6 @@ class ColumnProfile(BaseModel):
     numeric_mean: float | None = None
     semantic_profile_label: str | None = None
     semantic_profile_description: str | None = None
-    semantic_profile_analysis_methods: list[str] = Field(default_factory=list)
     semantic_profile_confidence: float | None = None
     semantic_profile_llm_needed: bool | None = None
     semantic_profile_llm_reasons: list[str] = Field(default_factory=list)
@@ -98,6 +97,8 @@ class PipelineState(TypedDict, total=False):
     uploaded_dataset_name: str
     use_llm_agents: bool
     llm_model: str | None
+    llm_fast_model: str | None
+    llm_strong_model: str | None
     dataset_id: str
     dataset_name: str
     dataset_meta: DatasetMeta
@@ -106,6 +107,7 @@ class PipelineState(TypedDict, total=False):
     example_index: dict[str, list[str]]
     preview_headers: list[str]
     preview_rows: list[dict[str, str]]
+    relationship_candidates: list[dict[str, Any]]
     columns: list[ColumnProfile]
     findings: list[ValidationFinding]
     agent_traces: list[AgentTrace]

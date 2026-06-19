@@ -35,22 +35,6 @@ TAG_RULE_MAP = {
     "code": ["code_domain", "reference_relation"],
 }
 
-SEMANTIC_TAG_PATTERNS = {
-    "date": ["일자", "일", "년월", "등록일", "허가일", "기준일"],
-    "phone": ["전화", "연락처", "휴대전화"],
-    "address": ["주소", "소재지"],
-    "numeric": ["수", "금액", "면적", "비율", "중량", "가격", "폭", "너비"],
-    "width": ["폭", "너비"],
-    "count": ["정원수", "개수", "건수", "인원수", "수"],
-    "enum": ["코드", "구분", "유형", "상태", "종류"],
-    "identifier": ["번호", "ID", "아이디", "일련번호"],
-    "name": ["명", "이름", "명칭"],
-    "amount": ["금액", "요금", "금", "가격", "비용", "원"],
-    "quantity": ["수량", "개수", "건수", "대수", "인원수", "좌석수", "잔여수", "총수"],
-    "rate": ["율", "비율", "점유율", "사용률"],
-    "code": ["코드"],
-}
-
 VALIDATION_CRITERIA = {
     "relation_consistency": {
         "label": "데이터 관계 정합성",
@@ -87,24 +71,15 @@ VALIDATION_CRITERIA = {
 }
 
 DEFAULT_COLUMN_ROUTING_CONFIDENCE = 0.4
-NORMALIZED_NAME_BONUS = 0.2
-TAG_CONFIDENCE_STEP = 0.1
-TAG_CONFIDENCE_CAP = 0.3
-MAX_ROUTING_CONFIDENCE = 0.95
 
-ROUTING_EXACT_MATCH_CONFIDENCE = 0.96
-ROUTING_SYNONYM_MATCH_CONFIDENCE = 0.90
-ROUTING_PARTIAL_MATCH_CONFIDENCE = 0.78
-ROUTING_RULE_ONLY_THRESHOLD = 0.60
-ROUTING_PARTIAL_MIN_LENGTH = 3
-ROUTING_PARTIAL_MAX_CANDIDATES = 3
-
-LLM_DEFAULT_MODEL = "gpt-4o-mini"
-LLM_DEFAULT_API_URL = "https://api.openai.com/v1/chat/completions"
+LLM_FAST_MODEL = "gemma4:e2b"
+LLM_STRONG_MODEL = "gemma4:e4b"
+LLM_DEFAULT_MODEL = LLM_FAST_MODEL
+OLLAMA_DEFAULT_API_URL = "http://127.0.0.1:11434/api/chat"
 LLM_REQUEST_TIMEOUT_SECONDS = 120
 LLM_STANDARD_TERM_SAMPLE_SIZE = 200
 LLM_RESOLUTION_CONFIDENCE = 0.78
-LLM_LOW_CONFIDENCE_THRESHOLD = 0.7
+LLM_STRONG_FALLBACK_CONFIDENCE = 0.72
 LLM_SEMANTIC_PROFILE_TRIGGER_MATCH_TYPES = {"partial", "rule_only", "rag_resolved", "llm_resolved", "unmatched"}
 LLM_SEMANTIC_PROFILE_ALWAYS_TRIGGER_TAGS = {"address"}
 LLM_SEMANTIC_PROFILE_ALWAYS_TRIGGER_NAME_TOKENS = {
@@ -160,14 +135,12 @@ UPLOAD_UPDATE_CYCLE = "user_upload"
 PROFILE_SAMPLE_ROW_LIMIT = 1000
 PROFILE_SAMPLE_VALUES_LIMIT = 5
 PROFILE_DISTINCT_TRACK_LIMIT = 200
-PROFILE_TOP_VALUE_LIMIT = 5
+PROFILE_TOP_VALUE_LIMIT = 30
 PROFILE_TYPE_INFERENCE_THRESHOLD = 0.8
-PREVIEW_ROW_LIMIT = 20
 
 LLM_SEMANTIC_PROFILE_CONFIDENCE_DEFAULT = 0.75
 
 CATEGORICAL_LLM_MIN_DISTINCT = 2
 CATEGORICAL_LLM_MAX_DISTINCT = 30
-CATEGORICAL_LLM_MAX_VALUES = 30
 CATEGORICAL_LLM_MIN_REPEAT_COUNT = 2
-CATEGORICAL_LLM_CONFIDENCE_THRESHOLD = 0.75
+CATEGORICAL_LLM_CONFIDENCE_THRESHOLD = 0.9

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from ..core.schema.models import AgentTrace
+try:
+    from ..core.schema.models import AgentTrace
+except ImportError:  # pragma: no cover
+    from core.schema.models import AgentTrace
 
 
 class BaseAgent:

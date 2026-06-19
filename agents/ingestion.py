@@ -1,8 +1,13 @@
 from __future__ import annotations
 
-from ..core.io.loaders import build_example_index, load_dataset_meta, load_standard_terms, load_uploaded_dataset_meta
-from ..core.schema.models import ColumnProfile, PipelineState
-from ..core.schema.normalization import build_column_profile
+try:
+    from ..core.io.loaders import build_example_index, load_dataset_meta, load_standard_terms, load_uploaded_dataset_meta
+    from ..core.schema.models import ColumnProfile, PipelineState
+    from ..core.schema.normalization import build_column_profile
+except ImportError:  # pragma: no cover
+    from core.io.loaders import build_example_index, load_dataset_meta, load_standard_terms, load_uploaded_dataset_meta
+    from core.schema.models import ColumnProfile, PipelineState
+    from core.schema.normalization import build_column_profile
 from .base import BaseAgent
 
 

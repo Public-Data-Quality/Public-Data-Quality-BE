@@ -13,7 +13,10 @@ Backend service for public data quality analysis and validation workflows.
 
 - `.env` files are ignored by Git.
 - Python cache and common local artifacts are ignored via `.gitignore`.
-- LLM integration uses the OpenAI GPT API by default:
-  `https://api.openai.com/v1/chat/completions`
-- Set `OPENAI_API_KEY` in `.env` before enabling LLM agents.
-- The default model is `gpt-4o-mini`. Override it with `LLM_MODEL` or the web form's `llm_model` value.
+- LLM integration uses Ollama chat by default:
+  `http://127.0.0.1:11434/api/chat`
+- Start Ollama and pull the models before enabling LLM agents:
+  `ollama pull gemma4:e2b`
+  `ollama pull gemma4:e4b`
+- The default strategy uses `gemma4:e2b` for fast routing, then uses `gemma4:e4b` for strong/precision validation.
+- Override it with `OLLAMA_FAST_MODEL`/`OLLAMA_STRONG_MODEL` or the web form's model values.

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 from collections.abc import Iterator
+from functools import lru_cache
 from pathlib import Path
 
 from ..config.constants import (
@@ -134,8 +135,19 @@ def _split_csv_list(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
+def _file_cache_key(file_path: str | Path) -> tuple[str, int]:
+    path = Path(file_path).resolve()
+    return str(path), path.stat().st_mtime_ns
+
+
 def load_standard_terms(csv_path: str | Path) -> tuple[dict[str, StandardTerm], dict[str, str]]:
-    path = Path(csv_path)
+    terms, synonyms = _load_standard_terms_cached(*_file_cache_key(csv_path))
+    return dict(terms), dict(synonyms)
+
+
+@lru_cache(maxsize=4)
+def _load_standard_terms_cached(path_key: str, _mtime_ns: int) -> tuple[dict[str, StandardTerm], dict[str, str]]:
+    path = Path(path_key)
     terms: dict[str, StandardTerm] = {}
     synonyms: dict[str, str] = {}
 
@@ -225,7 +237,13 @@ def load_uploaded_dataset_meta(file_path: str | Path, dataset_name: str | None =
 
 
 def build_example_index(meta_csv_path: str | Path, limit: int = 5000) -> dict[str, list[str]]:
-    path = Path(meta_csv_path)
+    examples = _build_example_index_cached(*_file_cache_key(meta_csv_path), limit)
+    return {key: list(values) for key, values in examples.items()}
+
+
+@lru_cache(maxsize=4)
+def _build_example_index_cached(path_key: str, _mtime_ns: int, limit: int = 5000) -> dict[str, list[str]]:
+    path = Path(path_key)
     examples: dict[str, list[str]] = {}
     seen = 0
     with path.open("r", encoding="utf-8-sig", newline="") as handle:

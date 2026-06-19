@@ -95,8 +95,12 @@ def contains_broken_text(value: str) -> bool:
     return bool(BROKEN_TEXT_RE.search(value))
 
 
-def has_whitespace_or_special_issue(value: str) -> bool:
-    return value != value.strip() or bool(SPECIAL_CHAR_RE.search(value))
+def has_whitespace_issue(value: str) -> bool:
+    return value != value.strip() or bool(re.search(r"\s{2,}", value))
+
+
+def has_special_char_issue(value: str) -> bool:
+    return bool(SPECIAL_CHAR_RE.search(value))
 
 
 def allowed_values(term: StandardTerm | None) -> list[str]:
