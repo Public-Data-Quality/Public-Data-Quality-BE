@@ -4,7 +4,7 @@ import re
 from collections import Counter
 
 try:
-    from ....core.config.constants import CATEGORICAL_LLM_MIN_REPEAT_COUNT
+    from .....core.config.constants import CATEGORICAL_LLM_MIN_REPEAT_COUNT
 except ImportError:  # pragma: no cover
     from core.config.constants import CATEGORICAL_LLM_MIN_REPEAT_COUNT
 from .column import (

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from ..schema.models import ValidationFinding
-from .column_rule_context import ColumnRuleContext
-from .column_rule_helpers import (
+from ...schema.models import ValidationFinding
+from .context import ColumnRuleContext
+from .helpers import (
     address_context_columns,
     duplicate_value_row_indexes,
     incomplete_detail_address_row_indexes,
@@ -12,7 +12,7 @@ from .column_rule_helpers import (
     matching_row_indexes,
     truncated_address_row_indexes,
 )
-from .helpers import (
+from ..helpers import (
     build_finding,
     contains_broken_text,
     has_special_char_issue,

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Callable
 
 try:
-    from ....core.schema.models import AgentTrace, PipelineState, ValidationFinding
+    from .....core.schema.models import AgentTrace, PipelineState, ValidationFinding
 except ImportError:  # pragma: no cover
     from core.schema.models import AgentTrace, PipelineState, ValidationFinding
 from ..value_validator import LLMCategoricalValueValidator

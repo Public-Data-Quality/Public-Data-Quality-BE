@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from ...schema.models import ColumnProfile, ValidationFinding
-from ..column_rules import looks_numeric_column
+from ..columns import looks_numeric_column
 from ..helpers import build_finding, parse_number
 from .common import candidate_groups, is_related_numeric_pair
 

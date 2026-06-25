@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 try:
-    from ....core.config.constants import CATEGORICAL_LLM_CONFIDENCE_THRESHOLD
-    from ....core.validation.helpers import build_finding
+    from .....core.config.constants import CATEGORICAL_LLM_CONFIDENCE_THRESHOLD
+    from .....core.validation.helpers import build_finding
 except ImportError:  # pragma: no cover
     from core.config.constants import CATEGORICAL_LLM_CONFIDENCE_THRESHOLD
     from core.validation.helpers import build_finding
@@ -200,6 +200,13 @@ def _append_manual_review_findings(*, column, rows: list[dict[str, str]], result
         reason = clean_reason_text(item.get("reason"))
         if not value:
             continue
+        row_indexes = value_rows(rows, column.raw_name, value)
+        if _has_existing_value_finding(
+            findings,
+            column_name=column.raw_name,
+            row_indexes=row_indexes,
+        ):
+            continue
         findings.append(
             build_finding(
                 column_name=column.raw_name,
@@ -208,13 +215,25 @@ def _append_manual_review_findings(*, column, rows: list[dict[str, str]], result
                 criterion_name="categorical_semantic_domain",
                 rule_id="categorical_value_manual_review",
                 message=f"'{value}' 값은 의미 판정이 애매해 수동 검토가 필요합니다.",
-                row_indexes=value_rows(rows, column.raw_name, value),
+                row_indexes=row_indexes,
                 related_columns=[column.raw_name],
                 evidence=_llm_evidence(result, confidence, reason),
             )
         )
         generated += 1
     return generated
+
+
+def _has_existing_value_finding(findings: list, *, column_name: str, row_indexes: list[int]) -> bool:
+    row_index_set = set(row_indexes)
+    for finding in findings:
+        if finding.column_name != column_name:
+            continue
+        if set(finding.row_indexes) != row_index_set:
+            continue
+        if finding.finding_type == "issue" or finding.rule_id == "categorical_value_manual_review":
+            return True
+    return False
 
 
 def _llm_evidence(result: dict, confidence: float, reason: str, *extra: str) -> list[str]:

@@ -1,5 +1,4 @@
 from .base import BaseAgent
-from .categorical_validation import CategoricalSemanticValidationAgent, LLMCategoricalValueValidator
 from .ingestion import ReferenceLoaderAgent, SchemaParsingAgent
 from .resolution import (
     LLMColumnResolver,
@@ -9,6 +8,7 @@ from .resolution import (
     SemanticProfilingAgent,
     should_run_rag,
 )
+from .validation.categorical import CategoricalSemanticValidationAgent, LLMCategoricalValueValidator
 
 
 def build_agents(

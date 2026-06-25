@@ -1,9 +1,4 @@
-"""Compatibility import path for the categorical validation agent.
-
-New code should import from ``agents.categorical``.
-"""
-
-from __future__ import annotations
+"""Validation agents grouped by validation domain."""
 
 from .categorical import CategoricalSemanticValidationAgent, LLMCategoricalValueValidator
 

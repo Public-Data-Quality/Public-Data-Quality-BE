@@ -1,4 +1,4 @@
-from .column_rules import build_repair_suggestion, validate_column
+from .columns import build_repair_suggestion, validate_column
 from .relationship_rules import validate_dataset_relationships
 from .semantic_profile_policy import semantic_profile_llm_reasons
 

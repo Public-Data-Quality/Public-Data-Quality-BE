@@ -4,7 +4,7 @@ from collections import Counter
 from dataclasses import dataclass
 
 try:
-    from ....core.validation.helpers import build_finding
+    from .....core.validation.helpers import build_finding
 except ImportError:  # pragma: no cover
     from core.validation.helpers import build_finding
 from ..checks.column import allows_local_prefix_truncation, allows_local_surface_normalization

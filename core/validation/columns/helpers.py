@@ -3,8 +3,8 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
-from ..schema.models import ColumnProfile
-from .column_rule_context import Rows
+from ...schema.models import ColumnProfile
+from .context import Rows
 
 RowPredicate = Callable[[str], bool]
 

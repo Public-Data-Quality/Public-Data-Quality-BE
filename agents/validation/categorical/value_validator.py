@@ -4,9 +4,9 @@ import os
 from typing import Any
 
 try:
-    from ...core.config.constants import LLM_FAST_MODEL, LLM_STRONG_MODEL
-    from ...core.llm import ChatLLMClient
-    from ...core.llm.categorical import (
+    from ....core.config.constants import LLM_FAST_MODEL, LLM_STRONG_MODEL
+    from ....core.llm import ChatLLMClient
+    from ....core.llm.categorical import (
         CATEGORICAL_VALUE_SYSTEM_PROMPT,
         ROW_CONTEXT_SYSTEM_PROMPT,
         categorical_value_validation_prompt,

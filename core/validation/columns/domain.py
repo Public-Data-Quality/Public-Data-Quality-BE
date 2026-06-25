@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from ..schema.models import ValidationFinding
-from .column_rule_context import ColumnRuleContext
-from .column_rule_helpers import matching_row_indexes
-from .helpers import (
+from ...schema.models import ValidationFinding
+from .context import ColumnRuleContext
+from .helpers import matching_row_indexes
+from ..helpers import (
     BOOLEAN_ALLOWED_VALUES,
     PHONE_DIGIT_RE,
     allowed_values,

@@ -4,10 +4,10 @@ from collections import Counter
 from typing import Any
 
 try:
-    from ...core.config.constants import CATEGORICAL_LLM_MAX_DISTINCT, CATEGORICAL_LLM_MIN_DISTINCT
+    from ....core.config.constants import CATEGORICAL_LLM_MAX_DISTINCT, CATEGORICAL_LLM_MIN_DISTINCT
 except ImportError:  # pragma: no cover
     from core.config.constants import CATEGORICAL_LLM_MAX_DISTINCT, CATEGORICAL_LLM_MIN_DISTINCT
-from ..base import BaseAgent
+from ...base import BaseAgent
 from .findings import (
     LocalCategoricalFindingCounts,
     apply_llm_categorical_findings,

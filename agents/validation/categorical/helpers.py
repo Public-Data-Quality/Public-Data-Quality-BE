@@ -1,7 +1,8 @@
 """Compatibility helpers for older categorical imports.
 
-New code should import from ``agents.categorical.checks``,
-``agents.categorical.findings``, or ``agents.categorical.utils``.
+New code should import from ``agents.validation.categorical.checks``,
+``agents.validation.categorical.findings``, or
+``agents.validation.categorical.utils``.
 """
 
 from __future__ import annotations

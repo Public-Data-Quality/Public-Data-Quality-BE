@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from ..schema.models import ColumnProfile, StandardTerm, ValidationFinding
+from ...schema.models import ColumnProfile, StandardTerm, ValidationFinding
 
 Rows = list[dict[str, str]]
 

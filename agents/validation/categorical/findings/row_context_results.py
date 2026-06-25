@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 try:
-    from ....core.config.constants import CATEGORICAL_LLM_CONFIDENCE_THRESHOLD
-    from ....core.schema.models import ValidationFinding
-    from ....core.validation.helpers import build_finding
+    from .....core.config.constants import CATEGORICAL_LLM_CONFIDENCE_THRESHOLD
+    from .....core.schema.models import ValidationFinding
+    from .....core.validation.helpers import build_finding
 except ImportError:  # pragma: no cover
     from core.config.constants import CATEGORICAL_LLM_CONFIDENCE_THRESHOLD
     from core.schema.models import ValidationFinding

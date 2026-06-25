@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from ..schema.models import ColumnProfile, DatasetMeta, StandardTerm, ValidationFinding
-from .column_completeness_rules import (
+from ...schema.models import ColumnProfile, DatasetMeta, StandardTerm, ValidationFinding
+from .completeness import (
     find_duplicate_identifiers,
     find_garbled_text,
     find_incomplete_detail_address,
@@ -12,21 +12,21 @@ from .column_completeness_rules import (
     find_truncated_address,
     find_whitespace_issues,
 )
-from .column_domain_rules import (
+from .domain import (
     find_invalid_booleans,
     find_invalid_codes,
     find_invalid_dates,
     find_invalid_phone_numbers,
 )
-from .column_numeric_rules import (
+from .numeric import (
     find_amount_domain_issues,
     find_latitude_domain_issues,
     find_longitude_domain_issues,
     find_quantity_domain_issues,
     find_rate_domain_issues,
 )
-from .column_rule_context import ColumnRuleCheck, build_column_rule_context, collect_findings
-from .column_rule_helpers import build_repair_suggestion, is_likely_required, looks_numeric_column
+from .context import ColumnRuleCheck, build_column_rule_context, collect_findings
+from .helpers import build_repair_suggestion, is_likely_required, looks_numeric_column
 
 BASE_RULE_CHECKS: tuple[ColumnRuleCheck, ...] = (
     find_garbled_text,
