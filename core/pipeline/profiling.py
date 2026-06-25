@@ -108,6 +108,7 @@ def _apply_profile_stats(
         bucket = stats[name]
         non_empty = bucket["non_empty_count"]
         rows = bucket["rows"]
+        column.total_count = rows
         column.null_count = bucket["null_count"]
         column.non_empty_count = non_empty
         column.null_ratio = round(bucket["null_count"] / rows, 4) if rows else None

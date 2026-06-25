@@ -46,6 +46,7 @@ class ColumnProfile(BaseModel):
     assigned_rules: list[str] = Field(default_factory=list)
     rag_required: bool = False
     rag_evidence: list[str] = Field(default_factory=list)
+    total_count: int | None = None
     non_empty_count: int = 0
     null_count: int = 0
     null_ratio: float | None = None
