@@ -32,6 +32,34 @@ ENTITY_COMPLETION_SUFFIXES = {
     "경로당",
     "관리소",
 }
+COMPLETE_LOCATION_VALUES = {
+    "정문",
+    "후문",
+    "입구",
+    "교내",
+    "본관",
+    "별관",
+    "강당",
+    "운동장",
+    "주차장",
+    "앞",
+    "뒤",
+    "뒷편",
+    "뒤편",
+    "서편",
+    "동편",
+    "남편",
+    "북편",
+    "지상",
+    "지하",
+}
+FACILITY_QUALIFIER_SUFFIXES = {
+    "주차장",
+    "명절주차장",
+    "체육관주차장",
+    "운동장주차장",
+    "공영주차장",
+}
 
 
 def is_normal_qualifier_suffix(suffix: str) -> bool:
@@ -51,6 +79,15 @@ def is_normal_qualifier_suffix(suffix: str) -> bool:
         r"^시설$",
     )
     return any(re.fullmatch(pattern, text) for pattern in normal_suffix_patterns)
+
+
+def is_complete_entity_or_location_value(value: str) -> bool:
+    text = normalized_text(value)
+    if not text:
+        return False
+    if text in COMPLETE_LOCATION_VALUES:
+        return True
+    return any(text.endswith(suffix) for suffix in ENTITY_COMPLETION_SUFFIXES)
 
 
 def is_short_korean_entity_prefix(short_norm: str, long_norm: str) -> bool:
@@ -92,6 +129,13 @@ def find_truncated_value_pairs(counter: Counter[str]) -> list[tuple[str, str]]:
             if long_norm.startswith(short_norm) and len(long_norm) - len(short_norm) <= 3:
                 if len(short_norm) / max(1, len(long_norm)) >= 0.45:
                     suffix = long_norm[len(short_norm) :]
+                    if (
+                        is_complete_entity_or_location_value(short_norm)
+                        and suffix in FACILITY_QUALIFIER_SUFFIXES
+                    ):
+                        continue
+                    if short_norm in COMPLETE_LOCATION_VALUES:
+                        continue
                     if is_normal_qualifier_suffix(suffix):
                         continue
                     if (

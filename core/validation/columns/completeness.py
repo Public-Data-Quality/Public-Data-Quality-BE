@@ -62,6 +62,7 @@ NON_UNIQUE_NAME_TOKENS = (
     "일자",
     "날짜",
 )
+REQUIRED_NULL_MAX_RATIO = 0.5
 
 
 def _normalize_name_for_identifier_check(value: str) -> str:
@@ -234,6 +235,8 @@ def find_missing_assigned_rules(context: ColumnRuleContext) -> list[ValidationFi
 def find_required_nulls(context: ColumnRuleContext) -> list[ValidationFinding]:
     column = context.column
     if not (is_likely_required(column) and (column.null_count or 0) > 0):
+        return []
+    if column.null_ratio is not None and column.null_ratio > REQUIRED_NULL_MAX_RATIO:
         return []
 
     return [

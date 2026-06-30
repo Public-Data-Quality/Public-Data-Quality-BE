@@ -106,3 +106,86 @@ def find_surface_normalization_pairs(counter: Counter[str]) -> list[tuple[str, s
             seen.add(pair)
             unique_pairs.append(pair)
     return unique_pairs
+
+
+def _edit_distance_at_most_one(left: str, right: str) -> bool:
+    if abs(len(left) - len(right)) > 1:
+        return False
+    if left == right:
+        return True
+
+    mismatches = 0
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] == right[j]:
+            i += 1
+            j += 1
+            continue
+        mismatches += 1
+        if mismatches > 1:
+            return False
+        if len(left) == len(right):
+            i += 1
+            j += 1
+        elif len(left) < len(right):
+            j += 1
+        else:
+            i += 1
+
+    if i < len(left) or j < len(right):
+        mismatches += 1
+    return mismatches <= 1
+
+
+def is_near_compact_domain_variant(source: str, target: str) -> bool:
+    source_key = canonical_normalization_key(source)
+    target_key = canonical_normalization_key(target)
+    if not source_key or not target_key or source_key == target_key:
+        return False
+    if is_numeric_like_value(source_key) or is_numeric_like_value(target_key):
+        return False
+    if len(target_key) < 2 or len(target_key) > 10:
+        return False
+    if len(source_key) > len(target_key) + 1:
+        return False
+    if target_key.startswith(source_key) and len(source_key) >= 1:
+        return True
+    if len(source_key) == len(target_key) and sorted(source_key) == sorted(target_key):
+        return True
+    if len(source_key) == len(target_key) and source_key[0] != target_key[0]:
+        return False
+    return _edit_distance_at_most_one(source_key, target_key)
+
+
+def find_compact_domain_variant_pairs(counter: Counter[str]) -> list[tuple[str, str]]:
+    total = sum(counter.values())
+    if total <= 0:
+        return []
+
+    dominant_values = [
+        value
+        for value, count in counter.most_common(5)
+        if count / total >= 0.2 and 2 <= len(canonical_normalization_key(value)) <= 10
+    ]
+    if not dominant_values:
+        return []
+
+    pairs: list[tuple[str, str]] = []
+    for source, source_count in counter.items():
+        source_ratio = source_count / total
+        if source_ratio >= 0.2:
+            continue
+        for target in dominant_values:
+            if source == target or source_count >= counter[target]:
+                continue
+            if is_near_compact_domain_variant(source, target):
+                pairs.append((source, target))
+                break
+
+    unique_pairs: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for pair in sorted(pairs, key=lambda item: (item[1], item[0])):
+        if pair not in seen:
+            seen.add(pair)
+            unique_pairs.append(pair)
+    return unique_pairs

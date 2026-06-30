@@ -2,6 +2,8 @@ from __future__ import annotations
 
 DEFAULT_META_CSV_NAME = "행정안전부_공공데이터포털 목록 메타정보_20250531.csv"
 DEFAULT_STANDARD_TERMS_CSV_NAME = "행정안전부_공공데이터 공통표준용어_20251101.csv"
+VALIDATION_OUTPUT_DIR_NAME = "validation"
+QUALITY_DETECTION_RESULTS_CSV_NAME = "quality_detection_results.csv"
 
 NORMALIZATION_SYNONYM_PATCHES = {
     "연락처": "전화번호",

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import tempfile
 import sys
+import tempfile
 import types
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 from flask import Flask, jsonify, make_response, request, send_from_directory
 from werkzeug.utils import secure_filename
@@ -20,6 +20,11 @@ if __package__ in (None, ""):  # pragma: no cover
     __package__ = package_name
 
 from .service import default_data_paths, run_pipeline
+
+
+def _uploaded_display_filename(filename: str | None) -> str:
+    raw_filename = filename or "uploaded_dataset.csv"
+    return PureWindowsPath(raw_filename).name or "uploaded_dataset.csv"
 
 
 def create_app() -> Flask:
@@ -49,14 +54,15 @@ def create_app() -> Flask:
                 return jsonify({"error": "dataset_file is required"}), 400
 
             try:
-                filename = secure_filename(uploaded_file.filename or "uploaded_dataset.csv")
-                suffix = Path(filename).suffix or ".csv"
+                display_filename = _uploaded_display_filename(uploaded_file.filename)
+                filename = secure_filename(display_filename) or "uploaded_dataset.csv"
+                suffix = Path(filename).suffix or Path(display_filename).suffix or ".csv"
                 with tempfile.TemporaryDirectory(prefix="public_data_quality_upload_") as tmp_dir:
                     uploaded_path = Path(tmp_dir) / f"dataset{suffix}"
                     uploaded_file.save(uploaded_path)
                     result = run_pipeline(
                         uploaded_dataset_csv=str(uploaded_path),
-                        uploaded_dataset_name=Path(filename).stem,
+                        uploaded_dataset_name=display_filename,
                         use_llm_agents=use_llm_agents,
                         llm_model=llm_model,
                         llm_fast_model=llm_fast_model,

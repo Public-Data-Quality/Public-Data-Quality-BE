@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import math
 from collections import Counter
-from datetime import datetime
 
 from ..config.constants import (
     PROFILE_DISTINCT_TRACK_LIMIT,
@@ -12,6 +11,7 @@ from ..config.constants import (
 )
 from ..io.loaders import iter_uploaded_rows
 from ..schema.models import AgentTrace, ColumnProfile, PipelineState
+from ..validation.helpers import parse_datetime
 from .tracing import pipeline_trace
 
 PROFILE_STEP_NAME = "profiler"
@@ -167,11 +167,4 @@ def _append_numeric_value(bucket: dict, value: str) -> None:
 
 
 def _is_date(value: str) -> bool:
-    patterns = ("%Y-%m-%d", "%Y%m%d", "%Y.%m.%d", "%Y/%m/%d", "%Y-%m", "%Y%m")
-    for pattern in patterns:
-        try:
-            datetime.strptime(value, pattern)
-            return True
-        except ValueError:
-            continue
-    return False
+    return parse_datetime(value) is not None

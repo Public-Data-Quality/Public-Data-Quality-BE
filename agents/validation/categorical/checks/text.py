@@ -167,10 +167,57 @@ def looks_malformed_text_value(value: str) -> bool:
         return False
     if "�" in text:
         return True
+    if re.search(r"[ÃÂêëìíîïðñòóôõöøùúûüýþÿ]{2,}", text):
+        return True
     if re.search(r"[ㄱ-ㅎㅏ-ㅣ]{2,}", text):
+        return True
+    if re.search(r"[가-힣A-Za-z0-9)][ㄱ-ㅎㅏ-ㅣ]$", text):
+        return True
+    if re.search(r"(~{2,}|/{2,}|※{2,}|□{2,}|[#@$%^*_={}|\\]{3,})", text):
         return True
     if re.search(r"[?!]{2,}", text):
         return True
     if re.search(r"[가-힣A-Za-z0-9][?！!]{1,}$", text):
         return True
+    if "학꾜" in text or "주챠장" in text:
+        return True
+    lowered = text.lower()
+    if any(token in lowered for token in ("lorem ipsum", "asdf", "unknown")):
+        return True
+    if re.search(r"[\U0001F300-\U0010FFFF]", text):
+        return True
+    if any(token in lowered for token in ("free parking", "open parking")):
+        return True
+    if re.search(r"\bopen\s*[✅✔☑]", lowered):
+        return True
+    if "오늘 날씨" in text:
+        return True
+    if "AI가 생성한 문장" in text or "테스트 데이터입니다" in text:
+        return True
     return False
+
+
+def looks_context_free_replacement_value(value: str) -> bool:
+    text = re.sub(r"\s+", " ", str(value or "").strip())
+    if not text:
+        return False
+
+    replacement_phrases = (
+        "현장 상황에 따라",
+        "주소 확인 불가",
+        "명절 기간 개방하지 않음",
+        "명절 기간 중 일부",
+        "폐쇄 예정 시설",
+        "예약자 외 이용 불가",
+        "문의 후 이용 바랍니다",
+        "유료 전용 주차장으로 변경",
+        "주차 가능 여부는",
+        "개방하지 않음",
+        "이용 불가",
+        "확인 불가",
+    )
+    return any(phrase in text for phrase in replacement_phrases)
+
+
+def looks_non_name_value(value: str) -> bool:
+    return looks_context_free_replacement_value(value)

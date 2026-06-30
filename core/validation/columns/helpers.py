@@ -42,9 +42,29 @@ def duplicate_value_row_indexes(rows: Rows, column_name: str) -> list[int]:
 
 
 def is_likely_required(column: ColumnProfile) -> bool:
-    required_tags = {"identifier", "name", "date", "address", "phone"}
-    return bool(required_tags.intersection(column.semantic_tags)) or any(
-        token in column.normalized_name for token in ("명", "이름", "번호", "일자", "주소", "전화")
+    name = f"{column.raw_name} {column.normalized_name}"
+    optional_name_tokens = (
+        "상세주소",
+        "상세",
+        "비고",
+        "참고",
+        "메모",
+        "설명",
+        "내용",
+        "특이사항",
+        "기타",
+        "부가",
+    )
+    if any(token in name for token in optional_name_tokens):
+        return False
+
+    required_tags = {"identifier", "name", "date"}
+    if required_tags.intersection(column.semantic_tags):
+        return True
+    if "address" in column.semantic_tags and "상세" not in name:
+        return True
+    return any(
+        token in column.normalized_name for token in ("명", "이름", "번호", "일자")
     )
 
 
